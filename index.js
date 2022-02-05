@@ -13,8 +13,7 @@ api.get("/l/:shortUrl", async (req, res) => {
   res.redirect(fullUrl);
 });
 
-// TODO: Switch to POST
-api.get("/s/:longUrl", async (req, res) => {
+api.post("/s/:longUrl", async (req, res) => {
   let bufferObj = Buffer.from(req.params.longUrl, "utf8");
   let shortenedUrl = bufferObj.toString("base64");
   console.log(`The encoded base64 string is: ${shortenedUrl}`);
