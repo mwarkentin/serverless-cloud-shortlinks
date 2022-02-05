@@ -2,10 +2,6 @@ import { Buffer } from "buffer";
 
 import { api, data } from "@serverless/cloud";
 
-api.get("/", async (req, res) => {
-  res.send("<h1>Hello Serverless Cloud!</h1>");
-});
-
 api.get("/l/:shortUrl", async (req, res) => {
   let result = await data.get(req.params.shortUrl);
   let fullUrl = `https://${result}`;
