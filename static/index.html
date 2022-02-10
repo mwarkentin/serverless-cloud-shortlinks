@@ -1,15 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/purecss@2.0.6/build/pure-min.css"
-      integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5"
-      crossorigin="anonymous"
-    />
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
-    <h1>Hello Serverless shortlinks!</h1>
+    <div class="container">
+      <h1>Hello Serverless Cloud shortlinks!</h1>
+      <h2>Isn't this a cool static site?</h2>
+      <p>Here are some shortlinks!</p>
+      <a class="btn btn-primary btn-large" href="https://polished-credit-hyuvl.cloud.serverless.com/l/d3d3LndhdmVhcHBzLmNvbQ==">/l/d3d3LndhdmVhcHBzLmNvbQ==</a>
+      <a class="btn btn-primary btn-large" href="https://polished-credit-hyuvl.cloud.serverless.com/l/d3d3Lmdvb2dsZS5jb20=">/l/d3d3Lmdvb2dsZS5jb20=</a>
+      <br />
+      <form onsubmit="return setAction(this)" method="post">
+        <div>
+          <label>Long link:</label>
+          <input id="longlink" name="longlink" type="text">
+        </div>
+        <input id="submit" type="submit">
+      </form>
+    </div>
+    <script>
+      function setAction(form) {
+        var longlink = document.getElementById("longlink").value
+        form.action = `https://polished-credit-hyuvl.cloud.serverless.com/s/${longlink}`;
+        alert(form.action);
+      }
+    </script>
   </body>
 </html>
