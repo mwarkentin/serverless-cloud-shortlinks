@@ -2,6 +2,10 @@ import { Buffer } from "buffer";
 
 import { api, data } from "@serverless/cloud";
 
+import cors from "cors";
+
+api.use(cors());
+
 api.get("/l/:shortUrl", async (req, res) => {
   let result = await data.get(req.params.shortUrl);
   let fullUrl = `https://${result}`;
