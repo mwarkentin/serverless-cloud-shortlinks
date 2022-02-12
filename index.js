@@ -1,10 +1,34 @@
 import { Buffer } from "buffer";
 
-import { api, data } from "@serverless/cloud";
+import { api, data, params } from "@serverless/cloud";
 
 import cors from "cors";
+import * as Sentry from "@sentry/node";
+import * as Tracing from "@sentry/tracing";
+
+
 
 api.use(cors());
+
+Sentry.init({
+  dsn: params.SENTRY_DSN,
+  environment: params.INSTANCE_NAME,
+  integrations: [
+    // enable HTTP calls tracing
+    new Sentry.Integrations.Http({ tracing: true }),
+    // enable Express.js middleware tracing
+    new Tracing.Integrations.Express({ api }),
+  ],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: params.SENTRY_TRACES_SAMPLE_RATE,
+});
+
+api.use(Sentry.Handlers.requestHandler());
+// TracingHandler creates a trace for every incoming request
+api.use(Sentry.Handlers.tracingHandler());
 
 api.get("/l/:shortUrl", async (req, res) => {
   let shortUrl = req.params.shortUrl;
@@ -23,4 +47,19 @@ api.post("/s/:longUrl", async (req, res) => {
   let result = await data.set(shortenedUrl, { url: req.params.longUrl, clicks: 0 });
 
   res.send(`Result: ${JSON.stringify(result)}<br><br>Short URL: ${shortenedUrl}`);
+});
+
+api.get("/debug-sentry", function mainHandler(req, res) {
+  throw new Error("My first Sentry error!");
+});
+
+// The error handler must be before any other error middleware and after all controllers
+api.use(Sentry.Handlers.errorHandler());
+
+// Optional fallthrough error handler
+api.use(function onError(err, req, res, next) {
+  // The error id is attached to `res.sentry` to be returned
+  // and optionally displayed to the user for support.
+  res.statusCode = 500;
+  res.end(`Internal Server Error\n\nError ID: ${res.sentry}\n`);
 });

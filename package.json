@@ -16,6 +16,8 @@
     "org": "mwarkentin"
   },
   "dependencies": {
+    "@sentry/node": "^6.17.7",
+    "@sentry/tracing": "^6.17.7",
     "cors": "^2.8.5"
   }
 }
