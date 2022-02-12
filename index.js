@@ -11,7 +11,7 @@ import * as Tracing from "@sentry/tracing";
 api.use(cors());
 
 Sentry.init({
-  dsn: "https://6177f670126f47dcabb3e01dbabbcf3a@o1142222.ingest.sentry.io/6201128",
+  dsn: params.SENTRY_DSN,
   environment: params.INSTANCE_NAME,
   integrations: [
     // enable HTTP calls tracing
@@ -23,7 +23,7 @@ Sentry.init({
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
+  tracesSampleRate: params.SENTRY_TRACES_SAMPLE_RATE,
 });
 
 api.use(Sentry.Handlers.requestHandler());
